@@ -4,5 +4,7 @@ A simple tool that automatically completes the video assignments on Khan Academy
 ### Usage
 #### Getting Cookies
 ```javascript
-document.cookie;
+console.log(
+  document.cookie
+);
 ```
