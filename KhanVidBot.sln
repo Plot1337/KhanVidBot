@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KhanVidBot", "KhanVidBot\KhanVidBot.csproj", "{B79D3739-4D9A-45F0-A114-6B162EC2CFE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{760A8E65-E7CA-4B01-9A5F-FFFE15458D14}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\getCookies.js = Scripts\getCookies.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B79D3739-4D9A-45F0-A114-6B162EC2CFE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79D3739-4D9A-45F0-A114-6B162EC2CFE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B79D3739-4D9A-45F0-A114-6B162EC2CFE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B79D3739-4D9A-45F0-A114-6B162EC2CFE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C35D7278-8234-407A-92E0-F5A186F98939}
+	EndGlobalSection
+EndGlobal
