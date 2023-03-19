@@ -84,9 +84,7 @@ namespace KhanVidBot.Properties {
         ///    actionResults {
         ///      pointsEarned {
         ///        points
-        ///        __typename
-        ///      }
-        /// [rest of string was truncated]&quot;;.
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UpdateUserVideoProgress {
             get {
@@ -116,8 +114,7 @@ namespace KhanVidBot.Properties {
         ///        contents {
         ///          ...ContentFields
         ///          __typename
-        ///        }
-        ///      [rest of string was truncated]&quot;;.
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserAssignmentsQuery {
             get {

@@ -18,7 +18,7 @@ internal partial class KhanClient : IDisposable
     public KhanClient(
         string url,
         string cookies,
-        bool debug = false
+        bool debug = true
         )
     {
         (_coachKaid, _studentListId) = ExtractDataFromUrlUnsafe(url);
@@ -74,6 +74,7 @@ internal partial class KhanClient : IDisposable
         var queryBody = new QueryBody
         {
             OperationName = op,
+            Query = Resources.UpdateUserVideoProgress,
             Variables = new QueryVariablesV2
             {
                 Input = new()
@@ -83,8 +84,7 @@ internal partial class KhanClient : IDisposable
                     LastSecondWatched = lastSecWatched,
                     DurationSeconds = assignment.Duration
                 }
-            },
-            Query = Resources.UpdateUserVideoProgress,
+            }
         };
 
         var res = await _client.PostAsJsonAsync(
@@ -112,24 +112,58 @@ internal partial class KhanClient : IDisposable
         catch { return null; }
     }
 
-    public async Task<AssignmentContent[]?> GetAssignments()
+    public async Task<List<AssignmentContent>> GetAllAssignments()
     {
         const string op = "UserAssignments";
 
-        var queryBody = new QueryBody
+        var queryBodyActive = new QueryBody
         {
             OperationName = op,
             Query = Resources.UserAssignmentsQuery,
             Variables = new QueryVariables
             {
                 StudentListId = _studentListId,
-                CoachKaid = _coachKaid
+                CoachKaid = _coachKaid,
+                DueAfter = DateTime.UtcNow,
+                OrderBy = "DUE_DATE_ASC"
             }
         };
 
+        var active = await GetAssignments(queryBodyActive);
+
+        var queryBodyPast = new QueryBody
+        {
+            OperationName = op,
+            Query = Resources.UserAssignmentsQuery,
+            Variables = new QueryVariables
+            {
+                StudentListId = _studentListId,
+                CoachKaid = _coachKaid,
+                OrderBy = "DUE_DATE_DESC",
+                DueBefore = DateTime.UtcNow
+            }
+        };
+
+        var past = await GetAssignments(queryBodyPast);
+
+        var res = new List<AssignmentContent>();
+
+        if (active != null && active.Length > 0)
+            res.AddRange(active);
+
+        if (past != null && past.Length > 0)
+            res.AddRange(past);
+
+        return res;
+    }
+
+    private async Task<AssignmentContent[]?> GetAssignments(QueryBody body)
+    {
+        const string op = "UserAssignments";
+
         var res = await _client.PostAsJsonAsync(
             GenGqlUrl(op),
-            queryBody
+            body
             );
 
         if (!res.IsSuccessStatusCode)

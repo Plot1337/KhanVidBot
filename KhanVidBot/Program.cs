@@ -52,9 +52,9 @@ internal partial class Program
 
         Logger.Info("Fetching assignments...");
 
-        var assignments = await client.GetAssignments();
+        var assignments = await client.GetAllAssignments();
 
-        if (assignments == null || assignments.Length == 0)
+        if (assignments == null || assignments.Count == 0)
         {
             Logger.Warn("No assignments found!");
             Logger.Info(
@@ -64,7 +64,7 @@ internal partial class Program
             return;
         }
 
-        Logger.Output($"Found {assignments.Length} assignments!...");
+        Logger.Output($"Found {assignments.Count} assignments!...");
 
         foreach (var assignment in assignments)
             await TryWatchVid(client, assignment);
