@@ -31,6 +31,7 @@ internal partial class KhanClient : IDisposable
         var handler = new HttpClientHandler
         {
             UseCookies = false,
+            UseProxy = debug,
             Proxy = debug ? new WebProxy(F_PROXY) : null
         };
 
