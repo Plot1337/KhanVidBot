@@ -32,7 +32,7 @@ internal class QueryVariables
     public DateTime? DueAfter { get; set; } = null;
 
     [JsonPropertyName("orderBy")]
-    public string OrderBy { get; set; }
+    public string? OrderBy { get; set; }
 
     [JsonPropertyName("dueBefore")]
     public DateTime? DueBefore { get; set; } = null;
