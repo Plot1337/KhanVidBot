@@ -102,19 +102,7 @@ namespace KhanVidBot.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to query UserAssignments($after: ID, $dueAfter: DateTime, $dueBefore: DateTime, $pageSize: Int, $orderBy: AssignmentOrder!, $studentListId: String, $coachKaid: String) {
-        ///  user {
-        ///    id
-        ///    kaid
-        ///    assignmentsPage(after: $after, dueAfter: $dueAfter, dueBefore: $dueBefore, pageSize: $pageSize, orderBy: $orderBy, studentListId: $studentListId, coachKaid: $coachKaid) {
-        ///      assignments {
-        ///        id
-        ///        key
-        ///        subjectSlug
-        ///        contents {
-        ///          ...ContentFields
-        ///          __typename
-        ///    [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to query UserAssignments($after: ID, $dueAfter: DateTime, $dueBefore: DateTime, $pageSize: Int, $orderBy: AssignmentOrder!, $studentListId: String, $coachKaid: String) {\n  user {\n    id\n    kaid\n    assignmentsPage(after: $after, dueAfter: $dueAfter, dueBefore: $dueBefore, pageSize: $pageSize, orderBy: $orderBy, studentListId: $studentListId, coachKaid: $coachKaid) {\n      assignments {\n        id\n        key\n        subjectSlug\n        contents {\n          ...ContentFields\n          __typename\n    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UserAssignmentsQuery {
             get {

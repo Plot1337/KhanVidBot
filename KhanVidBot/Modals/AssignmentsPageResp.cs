@@ -24,6 +24,15 @@ internal class AssignmentsPage
 {
     [JsonPropertyName("assignments")]
     public Assignment[]? Assignments { get; set; }
+
+    [JsonPropertyName("pageInfo")]
+    public PageInfo? PageInfo { get; set; }
+}
+
+internal class PageInfo
+{
+    [JsonPropertyName("nextCursor")]
+    public string? NextCursor { get; set; }
 }
 
 internal class Assignment

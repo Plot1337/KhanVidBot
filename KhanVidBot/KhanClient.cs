@@ -115,42 +115,13 @@ internal partial class KhanClient : IDisposable
 
     public async Task<List<AssignmentContent>> GetAllAssignments()
     {
-        const string op = "UserAssignments";
-
-        var queryBodyActive = new QueryBody
-        {
-            OperationName = op,
-            Query = Resources.UserAssignmentsQuery,
-            Variables = new QueryVariables
-            {
-                StudentListId = _studentListId,
-                CoachKaid = _coachKaid,
-                DueAfter = DateTime.UtcNow,
-                OrderBy = "DUE_DATE_ASC"
-            }
-        };
-
-        var active = await GetAssignments(queryBodyActive);
-
-        var queryBodyPast = new QueryBody
-        {
-            OperationName = op,
-            Query = Resources.UserAssignmentsQuery,
-            Variables = new QueryVariables
-            {
-                StudentListId = _studentListId,
-                CoachKaid = _coachKaid,
-                OrderBy = "DUE_DATE_DESC",
-                DueBefore = DateTime.UtcNow
-            }
-        };
-
-        var past = await GetAssignments(queryBodyPast);
-
         var res = new List<AssignmentContent>();
+        var active = await GetAssignments(true);
 
         if (active != null && active.Length > 0)
             res.AddRange(active);
+
+        var past = await GetAssignments(false);
 
         if (past != null && past.Length > 0)
             res.AddRange(past);
@@ -158,7 +129,53 @@ internal partial class KhanClient : IDisposable
         return res;
     }
 
-    private async Task<AssignmentContent[]?> GetAssignments(QueryBody body)
+    private async Task<AssignmentContent[]?> GetAssignments(bool active)
+    {
+        string? nextCursor = null;
+
+        const string op = "UserAssignments";
+        var result = new List<AssignmentContent>();
+
+        while (true)
+        {
+            var variables = new QueryVariables
+            {
+                After = nextCursor,
+                StudentListId = _studentListId,
+                CoachKaid = _coachKaid,
+                OrderBy = active ? "DUE_DATE_ASC" : "DUE_DATE_DESC"
+            };
+
+            if (active)
+                variables.DueAfter = DateTime.UtcNow;
+            else
+                variables.DueBefore = DateTime.UtcNow;
+
+            var queryBody = new QueryBody
+            {
+                OperationName = op,
+                Query = Resources.UserAssignmentsQuery,
+                Variables = variables
+            };
+
+            var (res, nc) = await GetAssignments(queryBody);
+
+            if (res != null && res.Length > 0)
+                result.AddRange(res);
+
+            nextCursor = nc;
+
+            if (string.IsNullOrEmpty(nextCursor))
+                break;
+        }
+
+        return
+            result.Count > 0 ?
+            result.ToArray() :
+            null;
+    }
+
+    private async Task<(AssignmentContent[]?, string?)> GetAssignments(QueryBody body)
     {
         const string op = "UserAssignments";
 
@@ -168,13 +185,19 @@ internal partial class KhanClient : IDisposable
             );
 
         if (!res.IsSuccessStatusCode)
-            return null;
+            return (null, null);
 
         var json = await res.Content.ReadFromJsonAsync<AssignmentsPageResp>();
-        var assignments = json?.Data?.User?.AssignmentsPage?.Assignments;
+
+        var assignmentsPage = json?.Data?.User?.AssignmentsPage;
+
+        if (assignmentsPage == null)
+            return (null, null);
+
+        var assignments = assignmentsPage.Assignments;
 
         if (assignments == null)
-            return null;
+            return (null, null);
 
         var result = new List<AssignmentContent>();
 
@@ -212,8 +235,8 @@ internal partial class KhanClient : IDisposable
 
         return
             result.Count == 0 ?
-            null :
-            result.ToArray();
+            (null, null) :
+            (result.ToArray(), assignmentsPage.PageInfo?.NextCursor);
     }
 
     public async Task<bool> TryGetKAStaticVersion()

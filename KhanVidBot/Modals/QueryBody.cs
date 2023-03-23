@@ -17,10 +17,10 @@ internal class QueryBody
 internal class QueryVariables
 {
     [JsonPropertyName("after")]
-    public object? After { get; } = null;
+    public string? After { get; set; } = null;
 
     [JsonPropertyName("pageSize")]
-    public int PageSize { get; } = 100;
+    public int PageSize { get; } = 900;
 
     [JsonPropertyName("studentListId")]
     public string? StudentListId { get; set; }
