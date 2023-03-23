@@ -18,7 +18,7 @@ internal partial class Program
     {
         Console.Title = "Khan Academy Video Bot - github.com/Plot1337/KhanVidBot";
 
-        bool debugProxy = true;
+        bool debugProxy = false;
 
         if (args.Length > 0)
             foreach (string arg in args)
